@@ -1,9 +1,10 @@
-import React,{useContext} from 'react'
+import React,{useContext,useState} from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 import { Chat } from "@material-ui/icons"
 
 import { AccountContext } from "../../context/AccountProvider"
 import HeaderMenu from './HeaderMenu'
+import InfoDrawer from '../drawer/InfoDrawer'
 
 const useStyles = makeStyles({
     header:{
@@ -16,7 +17,8 @@ const useStyles = makeStyles({
     avatar:{
         height:37,
         width:37,
-        borderRadius:"50%"
+        borderRadius:"50%",
+        cursor:"pointer"
     },
     icons:{
         marginLeft:'auto',
@@ -36,15 +38,23 @@ const useStyles = makeStyles({
 const Header = () => {
     const {account} = useContext(AccountContext)
     const classes = useStyles()
+    const [open, setOpen] = useState(false)
+
+    const toogleDrawer = () =>{
+        setOpen(true)
+    }
 
     return (
+        <>
         <Box className={classes.header}>
-           <img src={account.imageUrl} alt="display-picture" className={classes.avatar}/>
+           <img src={account.imageUrl} alt="display-picture" className={classes.avatar} onClick={()=>toogleDrawer()}/>
            <Box className={classes.icons}>
                 <Chat/>
                 <HeaderMenu/>
             </Box> 
         </Box>
+        <InfoDrawer open={open} setOpen={setOpen}/>
+        </>
     )
 }
 

@@ -8,11 +8,13 @@ import ChatBox from './ChatBox'
 const useStyles = makeStyles({
     loginHeader:{
         height:"200px",
-        background:"#00bfa5",
+        background:"#128c7e",
         boxShadow:"none"
     },
     header:{
-        height:"115px"
+        height:"115px",
+        background:"#128c7e",
+        boxShadow:"none"
     },
     component:{
         background:"#DCDCDC",
@@ -26,8 +28,8 @@ const Messenger = () => {
     const {account} = useContext(AccountContext)
 
     return (
-        <Box className={account?classes.header:classes.component}>
-            <AppBar className={classes.loginHeader}>
+        <Box className={classes.component}>
+            <AppBar className={account?classes.header:classes.loginHeader}>
                 <Toolbar></Toolbar>
             </AppBar>
             {
