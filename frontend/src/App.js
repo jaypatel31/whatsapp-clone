@@ -5,11 +5,11 @@ import TemplateProvider from "./theme/TemplateProvider";
 function App() {
   return (
     <div>
-      <TemplateProvider>
-        <AccountProvider>
-          <Messenger/>
-        </AccountProvider>
-      </TemplateProvider>
+        <TemplateProvider>
+          <AccountProvider>
+            <Messenger/>
+          </AccountProvider>
+        </TemplateProvider>
     </div>
   );
 }

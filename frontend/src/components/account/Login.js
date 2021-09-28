@@ -3,6 +3,8 @@ import { Dialog, withStyles, Box, Typography, makeStyles, ListItem, List} from '
 import { GoogleLogin } from 'react-google-login'
 import { AccountContext } from '../../context/AccountProvider'
 import { clientId } from '../../constants/Data'
+import { addUser } from '../../service/api'
+import {Link} from "react-router-dom"
 
 const style ={
     dialogPaper:{
@@ -52,8 +54,20 @@ const Login = ({classes}) => {
     const classname = useStyles()
     const qrurl = "https://www.ginifab.com/feeds/qr_code/img/qrcode.jpg"
 
-    const onLoginSuccess = (res) => {
-        setAccount(res.profileObj);
+    const onLoginSuccess = async (res) => {
+        
+        setAccount({
+            user_id:res.profileObj.googleId,
+            imageUrl:res.profileObj.imageUrl,
+            email:res.profileObj.email,
+            name:res.profileObj.name
+        });
+        await addUser({
+            user_id:res.profileObj.googleId,
+            imageUrl:res.profileObj.imageUrl,
+            email:res.profileObj.email,
+            name:res.profileObj.name
+        })
     }
     
     const onLoginFailure = () => {
@@ -84,6 +98,9 @@ const Login = ({classes}) => {
                         />
                     </Box>
                 </Box>
+            </Box>
+            <Box>
+                <Link to={"/sawo-auth"}>Login with SAWO</Link>
             </Box>
         </Dialog>
     )
