@@ -1,4 +1,4 @@
-import React,{useContext} from 'react'
+import React,{useContext,useEffect} from 'react'
 import {AppBar, Toolbar, makeStyles, Box} from "@material-ui/core"
 import { Router, Route, Switch } from "react-router";
 import { createBrowserHistory } from 'history';
@@ -26,22 +26,24 @@ const useStyles = makeStyles({
 })
 
 const Messenger = () => {
-    const history = createBrowserHistory();
+        const history = createBrowserHistory();
+
+   
     const classes = useStyles()
     const {account} = useContext(AccountContext)
 
     return (
-        <Router history={history}>
+        
             <Box className={classes.component}>
                 <AppBar className={account?classes.header:classes.loginHeader}>
                     <Toolbar></Toolbar>
                 </AppBar>
                 {
-                    (account)?<ChatBox/>:<><Route exact={true} path="/" component={Login} /><Route exact={true} path="/sawo-auth" component={SaLogin} /></>
+                    (account)?<ChatBox/>:<Router history={history}><Route exact={true} path="/" component={Login} /><Route exact={true} path="/sawo-auth" component={SaLogin} /></Router>
                 }
                 
             </Box>
-        </Router>
+        
     )
 }
 

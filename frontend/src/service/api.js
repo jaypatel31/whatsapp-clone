@@ -23,3 +23,13 @@ export const addUser = async ({user_id,imageUrl,email,name}) =>{
     }
     
 }
+
+export const getUsers = async () =>{
+    try{
+        let response = await axios.get(`${URL}/getUsers`)
+        return response.data
+    }catch(e){
+        console.log('Error While calling Get User',e)
+    }
+    
+}

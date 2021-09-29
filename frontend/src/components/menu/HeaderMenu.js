@@ -5,6 +5,7 @@ import { GoogleLogout } from 'react-google-login'
 import { clientId } from '../../constants/Data'
 import { AccountContext } from '../../context/AccountProvider'
 import InfoDrawer from '../drawer/InfoDrawer'
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
     menuItem:{
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 })
 
 const HeaderMenu = () => {
+    const history = useHistory();
     const classes = useStyles()
     const [open,setOpen] = useState(false)
     const [drawerOpen,setDrawerOpen] = useState(false)
@@ -38,8 +40,7 @@ const HeaderMenu = () => {
 
     const onLogoutSuccess = () =>{  
         setAccount('')
-        alert('You have been logged out succedfully!!')
-        console.clear()
+        history.push('/')
     }
 
     const onLogoutFailure = () =>{

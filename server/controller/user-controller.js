@@ -18,6 +18,13 @@ export const addUser = async (req,res)=>{
     }catch(e){
         return res.status(500).json({error:e})
     }
-    
+}
 
+export const getUsers = async (req,res) =>{
+    try{
+        const users = await User.find({});
+        return res.status(201).json(users)
+    }catch(e){
+        return res.status(500).json({error:e})
+    }
 }
