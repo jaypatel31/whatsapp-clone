@@ -1,7 +1,8 @@
 import { Box, Dialog,withStyles,makeStyles } from '@material-ui/core'
-import React from 'react'
+import React,{useContext} from 'react'
 
 import Menu from './menu/Menu'
+import Chat from './chat/Chat'
 
 const style ={
     dialogPaper:{
@@ -21,7 +22,10 @@ const useStyles = makeStyles({
         minWidth:"380px"
     },
     rightComponent:{
-        borderLeft:"1px solid rgba(0,0,0,0.14)"
+        borderLeft:"1px solid rgba(0,0,0,0.14)",
+        width:"70%",
+        minWidth:"300px",
+        height:"100%"
     }
 })
 
@@ -35,7 +39,7 @@ const ChatBox = ({classes}) => {
                 </Box>
 
                 <Box className={classname.rightComponent}>
-                    hello
+                    <Chat/>
                 </Box>
             </Box>
         </Dialog>

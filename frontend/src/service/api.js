@@ -33,3 +33,15 @@ export const getUsers = async () =>{
     }
     
 }
+
+export const setConversation = async (data) => {
+    try{
+        await axios.post(`${URL}/conversation`,data,{
+            headers:{
+                'Content-Type':"application/json"
+            }
+        })
+    }catch(e){
+        console.log('Error While calling Set User',e)
+    }
+}

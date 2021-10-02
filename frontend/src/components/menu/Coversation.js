@@ -1,5 +1,9 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import { Box, Typography, makeStyles } from '@material-ui/core'
+
+import { AccountContext } from '../../context/AccountProvider'
+import { setConversation } from '../../service/api'
+import { UserContext } from '../../constants/UserProvider'
 
 const useStyles = makeStyles({
     displayPicture:{
@@ -19,12 +23,21 @@ const useStyles = makeStyles({
 
 const Coversation = ({user}) => {
 
+    const {account} = useContext(AccountContext)
+
+    const {person,setPerson} = useContext(UserContext)
+    
     const classes  = useStyles()
 
     const url = user.imageUrl
 
+    const setUser = async () =>{
+        setPerson(user);
+        await setConversation({senderId:account.user_id,receiverId:user.user_id})
+    }
+
     return (
-        <Box className={classes.container}>
+        <Box className={classes.container} onClick={()=> setUser()}>
             <Box >
                 <img src={url} alt="dp-img" className={classes.displayPicture}/>
             </Box>
