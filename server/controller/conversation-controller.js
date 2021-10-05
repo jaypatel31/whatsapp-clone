@@ -21,3 +21,13 @@ export const setConversation = async (req,res) =>{
         return res.status(500).json(e)
     }
 }
+
+export const getConversation = async (req,res) =>{
+    const {senderId,receiverId} = req.body
+    try{
+        const conversation = await Conversation.findOne({members:{$all:[senderId,receiverId]}})
+        return res.status(200).json(conversation)
+    }catch(e){
+        return res.status(500).json(e)
+    }
+}

@@ -45,3 +45,29 @@ export const setConversation = async (data) => {
         console.log('Error While calling Set User',e)
     }
 }
+
+
+export const getConversation = async (data) =>{
+    try{
+        let response = await axios.post(`${URL}/conversation/get`,data,{
+            headers:{
+                'Content-Type':"application/json"
+            }
+        })
+        return response.data
+    }catch(e){
+        console.log('Error While calling Get Conversation',e)
+    }
+}
+
+export const newMessage = async (data) =>{
+    try{
+        axios.post(`${URL}/message/add`,data,{
+            headers:{
+                'Content-Type':"application/json"
+            }
+        })
+    }catch(e){
+        console.log('Error While calling New Message',e)
+    }
+}
