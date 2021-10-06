@@ -1,9 +1,11 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext, useEffect} from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 import Footer from "./Footer"
 
 import { AccountContext } from '../../context/AccountProvider'
 import { newMessage } from '../../service/api'
+import { getMessages } from '../../service/api'
+import Message from './Message'
 
 const useStyles = makeStyles({
     wrapper:{
@@ -12,6 +14,9 @@ const useStyles = makeStyles({
     },
     component:{
         height:'78vh'
+    },
+    container:{
+        padding:"1px 80px"
     }
 }) 
 
@@ -20,6 +25,15 @@ const Messages = ({conversation}) => {
     const [value, setValue] = useState("")
     const {account} = useContext(AccountContext)
     const classes = useStyles()
+    const [messages, setMessages] = useState([])
+
+    useEffect(() => {
+        const getMessageDeatils = async () =>{
+            let response  = await getMessages(conversation._id)
+            setMessages(response.data)
+        }
+        getMessageDeatils()
+    }, [conversation?._id])
 
     const sendText = async (e) =>{
         let code = e.keyCode || e.which
@@ -41,7 +55,15 @@ const Messages = ({conversation}) => {
     return (
         <Box className={classes.wrapper}>
             <Box className={classes.component}>
-                Hello
+                {
+                    messages && messages.map((message,index)=>{
+                        return (
+                            <Box key={index} className={classes.container}>
+                                <Message message={message}/>
+                            </Box>
+                        )
+                    })
+                }
             </Box>
             <Footer sendText={sendText} setValue={setValue} value={value}/>
         </Box>

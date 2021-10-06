@@ -3,6 +3,8 @@ import React,{useContext} from 'react'
 
 import Menu from './menu/Menu'
 import Chat from './chat/Chat'
+import { UserContext } from '../constants/UserProvider'
+import EmptyChat from './chat/EmptyChat'
 
 const style ={
     dialogPaper:{
@@ -30,6 +32,9 @@ const useStyles = makeStyles({
 })
 
 const ChatBox = ({classes}) => {
+
+    const {person} = useContext(UserContext)
+
     const classname = useStyles()
     return (
         <Dialog open={true} classes={{paper:classes.dialogPaper}} BackdropProps={{style:{backgroundColor:"unset"}}}>
@@ -39,7 +44,10 @@ const ChatBox = ({classes}) => {
                 </Box>
 
                 <Box className={classname.rightComponent}>
-                    <Chat/>
+                    {
+                        Object.keys(person).length ? <Chat/> : <EmptyChat/>
+                    }
+                    
                 </Box>
             </Box>
         </Dialog>

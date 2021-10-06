@@ -71,3 +71,11 @@ export const newMessage = async (data) =>{
         console.log('Error While calling New Message',e)
     }
 }
+
+export const getMessages = async (data) =>{
+    try{
+        return axios.get(`${URL}/message/get/${data}`)
+    }catch(e){
+        console.log('Error While calling get Message',e)
+    }
+}
