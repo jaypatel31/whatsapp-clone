@@ -3,6 +3,7 @@ import {Box,Typography, makeStyles} from "@material-ui/core"
 
 import { UserContext } from '../../constants/UserProvider'
 import { MoreVert, Search } from '@material-ui/icons'
+import { AccountContext } from '../../context/AccountProvider'
 
 const useStyles = makeStyles({
     header:{
@@ -38,7 +39,7 @@ const useStyles = makeStyles({
 
 const ChatHeader = () => {
     const {person} = useContext(UserContext)
-
+    const {activeUsers} = useContext(AccountContext)
     const classes = useStyles()
 
     return (
@@ -46,7 +47,7 @@ const ChatHeader = () => {
             <img src={person.imageUrl} alt="person-img" className={classes.dp}/>
             <Box>
                 <Typography className={classes.name}>{person.name}</Typography>
-                <Typography className={classes.status}>Online</Typography>
+                <Typography className={classes.status}>{activeUsers?.find(user=>user.userId===person.user_id)?"Online":"Offline"}</Typography>
             </Box>
             <Box className={classes.rightComponent}>
                 <Search/>

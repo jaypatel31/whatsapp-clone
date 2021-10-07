@@ -1,4 +1,4 @@
-import React,{useState,useContext, useEffect} from 'react'
+import React,{useState,useContext, useEffect, useRef} from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 import Footer from "./Footer"
 
@@ -13,19 +13,21 @@ const useStyles = makeStyles({
         backgroundSize:'50%'
     },
     component:{
-        height:'78vh'
+        height:'78vh',
+        overflow:'scroll'
     },
     container:{
         padding:"1px 80px"
     }
 }) 
 
-const Messages = ({conversation}) => {
-
+const Messages = ({person, conversation}) => {
+    const scrollRef = useRef()
     const [value, setValue] = useState("")
-    const {account} = useContext(AccountContext)
+    const {account, socket, flag, setFlag} = useContext(AccountContext)
     const classes = useStyles()
     const [messages, setMessages] = useState([])
+    const [incomingMesage, setIncomingMesage] = useState(null)
 
     useEffect(() => {
         const getMessageDeatils = async () =>{
@@ -33,7 +35,30 @@ const Messages = ({conversation}) => {
             setMessages(response.data)
         }
         getMessageDeatils()
-    }, [conversation?._id])
+    }, [conversation?._id,person.user_id,flag])
+
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'end',
+          })
+    }, [messages])
+
+    useEffect(() => {
+        socket.current.on('getMessage',data=>{
+            setIncomingMesage({
+                sender:data.senderId,
+                text:data.text,
+                createdAt: Date.now()
+            })
+        })
+    }, [])
+
+    useEffect(() => {
+        incomingMesage && conversation?.members?.includes(incomingMesage.sender) && setMessages(prev => [...prev,incomingMesage])
+    }, [incomingMesage,conversation])
+
+    const receiverId = conversation?.members?.find(member=>member !== account.user_id)
 
     const sendText = async (e) =>{
         let code = e.keyCode || e.which
@@ -47,8 +72,15 @@ const Messages = ({conversation}) => {
                 text:value
             }
 
+            socket.current.emit('sendMessage',{
+                senderId:account.user_id,
+                receiverId,
+                text:value
+            })
+
             await newMessage(message)
             setValue('')
+            setFlag(prev => !prev)
         }
     }
 
@@ -58,8 +90,8 @@ const Messages = ({conversation}) => {
                 {
                     messages && messages.map((message,index)=>{
                         return (
-                            <Box key={index} className={classes.container}>
-                                <Message message={message}/>
+                            <Box key={index} className={classes.container} ref={scrollRef}>
+                                <Message message={message} />
                             </Box>
                         )
                     })

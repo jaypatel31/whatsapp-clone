@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 const Conversation = ({input}) => {
     const [users, setUsers] = useState([])
 
-    const {account} = useContext(AccountContext)
+    const {account,socket,setActiveUsers} = useContext(AccountContext)
 
     const classes = useStyles()
 
@@ -28,6 +28,13 @@ const Conversation = ({input}) => {
 
         fetchData()
     }, [])
+
+    useEffect(() => {
+        socket.current.emit('addUser',account.user_id)
+        socket.current.on('getUsers',users=>{
+            setActiveUsers(users)
+        })
+    }, [account])
 
 
     return (
