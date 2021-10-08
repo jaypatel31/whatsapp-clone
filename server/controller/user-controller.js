@@ -1,4 +1,5 @@
 import User from "../model/User.js"
+import mongoose from 'mongoose';
 
 export const addUser = async (req,res)=>{
     const {user_id,imageUrl,email,name} = req.body
@@ -24,6 +25,16 @@ export const getUsers = async (req,res) =>{
     try{
         const users = await User.find({});
         return res.status(201).json(users)
+    }catch(e){
+        return res.status(500).json({error:e})
+    }
+}
+
+export const nameChange = async (req,res) => {
+    try{
+        await User.findOneAndUpdate({user_id:req.body.userId},{name:req.body.name})
+        return res.status(201).json({message:"Name Changed Successfully"})
+
     }catch(e){
         return res.status(500).json({error:e})
     }

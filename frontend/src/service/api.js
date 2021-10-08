@@ -79,3 +79,15 @@ export const getMessages = async (data) =>{
         console.log('Error While calling get Message',e)
     }
 }
+
+export const changeName = async (data) => {
+    try{
+        return axios.post(`${URL}/user/nameChange`,data,{
+            headers:{
+                "Content-Type":"application/json"
+            }
+        })
+    }catch(e){
+        console.log('Error While change Name',e)
+    }
+}
