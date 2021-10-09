@@ -78,7 +78,8 @@ const Messages = ({person, conversation}) => {
                 text:value
             })
 
-            await newMessage(message)
+            let response = await newMessage(message)
+            console.log(response)
             setValue('')
             setFlag(prev => !prev)
         }

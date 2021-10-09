@@ -1,10 +1,11 @@
-import React,{useState, useContext} from 'react'
+import React,{useState, useContext,Button} from 'react'
 import { Dialog, withStyles, Box, Typography, makeStyles, ListItem, List} from '@material-ui/core'
 import { GoogleLogin } from 'react-google-login'
 import { AccountContext } from '../../context/AccountProvider'
 import { clientId } from '../../constants/Data'
 import { addUser } from '../../service/api'
 import {Link} from "react-router-dom"
+import { Autorenew } from '@material-ui/icons'
 
 const style ={
     dialogPaper:{
@@ -44,6 +45,16 @@ const useStyles = makeStyles({
             lineHeight:"28px",
             color:"#484848"
         }
+    },
+    button:{
+        padding:"8px",
+        border:"2px solid black",
+        color:"white",
+        textAlign:"center",
+        background:"#128c7e",
+        textDecoration:'none',
+        margin:"auto",
+        boxShadow:"0px 2px 8px rgba(0,0,0,0.6)"
     }
 })
 
@@ -56,18 +67,31 @@ const Login = ({classes}) => {
 
     const onLoginSuccess = async (res) => {
         
-        setAccount({
-            user_id:res.profileObj.googleId,
-            imageUrl:res.profileObj.imageUrl,
-            email:res.profileObj.email,
-            name:res.profileObj.name
-        });
-        await addUser({
+        
+        let response = await addUser({
             user_id:res.profileObj.googleId,
             imageUrl:res.profileObj.imageUrl,
             email:res.profileObj.email,
             name:res.profileObj.name
         })
+        console.log(response.data)
+        if(response.data.message === "User Already Exist"){
+            setAccount({
+                user_id:response.data.exist.user_id,
+                imageUrl:response.data.exist.imageUrl,
+                email:response.data.exist.email,
+                name:response.data.exist.name
+            });
+        }
+        else{
+            setAccount({
+                user_id:res.profileObj.googleId,
+                imageUrl:res.profileObj.imageUrl,
+                email:res.profileObj.email,
+                name:res.profileObj.name
+            });
+        }
+        
     }
     
     const onLoginFailure = () => {
@@ -99,8 +123,9 @@ const Login = ({classes}) => {
                     </Box>
                 </Box>
             </Box>
-            <Box>
-                <Link to={"/sawo-auth"}>Login with SAWO</Link>
+            <Box style={{textAlign:"center"}}>
+                <Link to={"/sawo-auth"} className={classname.button}>Login with SAWO</Link>
+                
             </Box>
         </Dialog>
     )

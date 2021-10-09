@@ -51,20 +51,32 @@ const useStyles = makeStyles({
 const SaLogin = ({classes}) => {
     const history = createBrowserHistory();
     const {account, setAccount} = useContext(AccountContext)
-    function sawoLoginCallback(payload) {
+    async function sawoLoginCallback(payload) {
         
-        setAccount({
-            user_id:payload.user_id,
-            imageUrl:'https://cdn.onlinewebfonts.com/svg/img_275469.png',
-            email:payload.identifier,
-            name:payload.customFieldInputValues.Name
-        });
-        addUser({
+        
+        let response = await addUser({
             user_id:payload.user_id,
             imageUrl:'https://cdn.onlinewebfonts.com/svg/img_275469.png',
             email:payload.identifier,
             name:payload.customFieldInputValues.Name
         })
+        
+        if(response.data.message === "User Already Exist"){
+            setAccount({
+                user_id:response.data.exist.user_id,
+                imageUrl:response.data.exist.imageUrl,
+                email:response.data.exist.email,
+                name:response.data.exist.name
+            });
+        }
+        else{
+            setAccount({
+                user_id:payload.user_id,
+                imageUrl:'https://cdn.onlinewebfonts.com/svg/img_275469.png',
+                email:payload.identifier,
+                name:payload.customFieldInputValues.Name
+            });
+        }
         history.push('/')
     }
     const classname = useStyles()
@@ -72,7 +84,7 @@ const SaLogin = ({classes}) => {
     const sawoConfig = {
         onSuccess: sawoLoginCallback, //required,
         identifierType: 'email', //required, must be one of: 'email', 'phone_number_sms',
-        apiKey: '3d59bd49-0bf6-42f0-b2b6-a36e7e68f0e7', // required, get it from sawo dev.sawolabs.com,
+        apiKey: 'd7e4ff49-dd6c-4d6b-ad40-c5384d31d028', // required, get it from sawo dev.sawolabs.com,
         containerHeight: '500px', // the login container height, default is 230px
     }
 

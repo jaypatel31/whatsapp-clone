@@ -11,7 +11,7 @@ export const addUser = async (req,res)=>{
         let exist = await User.findOne({user_id})
 
         if(exist){
-            return res.status(200).json({message:"User Already Exist"})
+            return res.status(200).json({message:"User Already Exist",exist})
         }
         const newUser = new User({user_id,imageUrl,email,name})
         await newUser.save();
@@ -35,6 +35,15 @@ export const nameChange = async (req,res) => {
         await User.findOneAndUpdate({user_id:req.body.userId},{name:req.body.name})
         return res.status(201).json({message:"Name Changed Successfully"})
 
+    }catch(e){
+        return res.status(500).json({error:e})
+    }
+}
+
+export const updatePic = async (req,res) =>{
+    try{
+        await User.findOneAndUpdate({user_id:req.body.userId},{imageUrl:req.body.pic})
+        return res.status(201).json({message:"Pic Updated Successfully"})
     }catch(e){
         return res.status(500).json({error:e})
     }

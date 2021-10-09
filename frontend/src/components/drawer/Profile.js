@@ -1,8 +1,11 @@
-import { Box, makeStyles, Typography, Input, withStyles } from '@material-ui/core'
+import { Box, makeStyles, Typography, Input, withStyles, TextField, Button } from '@material-ui/core'
 import React,{useContext,useEffect,useState,useRef} from 'react'
 import { AccountContext } from '../../context/AccountProvider'
 import CreateIcon from '@material-ui/icons/Create';
-import { changeName } from '../../service/api';
+import { changeName, updateProfilePic } from '../../service/api';
+import CheckIcon from '@material-ui/icons/Check';
+
+
 const style ={
     inputField:{
         margin:"0px!important"
@@ -12,7 +15,8 @@ const style ={
 const useStyles = makeStyles({
     imageContainer:{
         display:"flex",
-        justifyContent:"center"
+        justifyContent:"center",
+        alignItems:'center'
     },
     displayPicture:{
         borderRadius:"50%",
@@ -54,6 +58,9 @@ const Profile = ({classes}) => {
     const [name, setname] = useState("")
     const [active, setActive] = useState(true)
     const classname = useStyles()
+    const [image, setImage] = useState("")
+
+
     useEffect(() => {
         setname(account.name)
     }, [])
@@ -83,6 +90,42 @@ const Profile = ({classes}) => {
         }
     }
 
+    const updatePic = () => {
+        if(image){
+            const data = new FormData()
+            data.append('file',image)
+            data.append('upload_preset',"insta-clone")
+            data.append("cloud_name","instagram-clone31")
+            
+            fetch("https://api.cloudinary.com/v1_1/instagram-clone31/image/upload",{
+                method:"post",
+                body:data
+            })
+            .then(res=>res.json())
+            .then((data)=>{
+                const sendRequest = async (data) =>{
+                    let obj = {
+                        userId:account.user_id,
+                        pic:data.url
+                    }
+                    let response = await updateProfilePic(obj);
+                    console.log(response)
+                    setAccount(prevState=>{
+                        return{
+                            ...prevState,
+                            imageUrl:data.url
+                        }
+                    })
+                }
+                sendRequest(data)
+               
+            })
+            .catch(e=>{
+                console.log(e)
+            })
+        }
+    }
+
 
     const sendRequest = async () =>{
         const data = {userId:account.user_id,name}
@@ -100,6 +143,11 @@ const Profile = ({classes}) => {
         <>
         <Box className={classname.imageContainer}>
             <img src={account.imageUrl} alt="dp" className={classname.displayPicture}/>
+            
+        </Box>
+        <Box className={classname.imageContainer} >
+            <TextField id="standard-basic" variant="standard" type="file" classes={{input:classes.inputField}} onChange={(e)=>setImage(e.target.files[0])}/>
+            <CheckIcon onClick={updatePic}/>
         </Box>
         <Box className={classname.nameContainer}>
             <Typography>Your name</Typography>

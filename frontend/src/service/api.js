@@ -13,10 +13,6 @@ export const addUser = async ({user_id,imageUrl,email,name}) =>{
             headers:{
                 'Content-Type':"application/json"
             }
-        }).then(response=>{
-            console.log(response)
-        }).catch(e=>{
-            console.log(e)
         })
     }catch(e){
         console.log('Error While calling Add User',e)
@@ -62,7 +58,7 @@ export const getConversation = async (data) =>{
 
 export const newMessage = async (data) =>{
     try{
-        axios.post(`${URL}/message/add`,data,{
+        return axios.post(`${URL}/message/add`,data,{
             headers:{
                 'Content-Type':"application/json"
             }
@@ -89,5 +85,17 @@ export const changeName = async (data) => {
         })
     }catch(e){
         console.log('Error While change Name',e)
+    }
+}
+
+export const updateProfilePic = async (data) =>{
+    try{
+        return axios.post(`${URL}/user/updatePic`,data,{
+            headers:{
+                "Content-Type":"application/json"
+            }
+        })
+    }catch(e){
+        console.log('Error While Updating Pic',e)
     }
 }
