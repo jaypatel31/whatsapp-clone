@@ -10,7 +10,7 @@ const AccountProvider = ({children}) =>{
     const socket = useRef()
 
     useEffect(() => {
-        socket.current = io(`https://whatsappclone31.herokuapp.com/${process.env.PORT}`)
+        socket.current = io(`https://whatsappsocket.herokuapp.com/`)
     }, [])
 
     return(

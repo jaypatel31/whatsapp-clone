@@ -1,6 +1,5 @@
 import { Server } from "socket.io";
 
-export const  socketthing = () =>{
 
     const PORT = process.env.PORT || 9000
     
@@ -53,4 +52,4 @@ export const  socketthing = () =>{
         })
     
     })
-}
+

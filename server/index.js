@@ -4,7 +4,6 @@ import cors from "cors"
 import path from 'path'
 import Connection from "./database/db.js";
 import router from "./routes/Route.js";
-import {socketthing} from "./socket/index.js"
 
 dotenv.config()
 
@@ -32,4 +31,4 @@ app.listen(PORT,()=>{
     console.log(`Listening on port ${PORT}`)
 })
 
-socketthing()
+
